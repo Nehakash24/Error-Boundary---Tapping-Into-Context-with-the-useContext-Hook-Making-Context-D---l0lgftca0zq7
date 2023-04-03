@@ -1,15 +1,28 @@
-import React, { useState } from "react";
+import React from "react";
 
-const Component = (props) => {
-  const [error, setError] = useState(false);
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
 
-  props.change(setError);
-
-  if (error) {
-    throw new Error("Error");
+    this.state = { error: false };
   }
 
-  return <></>;
-};
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
 
-export default Component;
+  render() {
+    if (this.state.hasError) {
+      return (
+        <p id="error">
+          There is an error in your react app. Please Check again. This message
+          has been generated from error boundary
+        </p>
+      );
+    }
+
+    return <>{this.props.children}</>;
+  }
+}
+
+export default ErrorBoundary;
